@@ -37,7 +37,7 @@ public class ScriptEvaluation {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                myHSP.main(new String[] { ".\\blocks\\domain.pddl",".\\blocks\\"+item.getName(),"blocksTime.txt","blocksLength.txt" });
+                HSP.main(new String[] { ".\\blocks\\domain.pddl",".\\blocks\\"+item.getName(),"blocksTime.txt","blocksLength.txt" });
                 MyPlanner.main(new String[] { ".\\blocks\\domain.pddl",".\\blocks\\"+item.getName(),"blocksTime.txt","blocksLength.txt" });
             }
         }
@@ -66,7 +66,7 @@ public class ScriptEvaluation {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                myHSP.main(new String[] { ".\\depots\\domain.pddl",".\\depots\\"+item.getName(),"depotsTime.txt","depotsLength.txt" });
+                HSP.main(new String[] { ".\\depots\\domain.pddl",".\\depots\\"+item.getName(),"depotsTime.txt","depotsLength.txt" });
                 MyPlanner.main(new String[] { ".\\depots\\domain.pddl",".\\depots\\"+item.getName(),"depotsTime.txt","depotsLength.txt" });
             }
         }
@@ -95,7 +95,7 @@ public class ScriptEvaluation {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                myHSP.main(new String[] { ".\\gripper\\domain.pddl",".\\gripper\\"+item.getName(),"gripperTime.txt","gripperLength.txt" });
+                HSP.main(new String[] { ".\\gripper\\domain.pddl",".\\gripper\\"+item.getName(),"gripperTime.txt","gripperLength.txt" });
                 MyPlanner.main(new String[] { ".\\gripper\\domain.pddl",".\\gripper\\"+item.getName(),"gripperTime.txt","gripperLength.txt" });
             }
         }
@@ -125,7 +125,7 @@ public class ScriptEvaluation {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                myHSP.main(new String[] { ".\\logistics\\domain.pddl",".\\logistics\\"+item.getName(),"logisticsTime.txt","logisticsLength.txt" });
+                HSP.main(new String[] { ".\\logistics\\domain.pddl",".\\logistics\\"+item.getName(),"logisticsTime.txt","logisticsLength.txt" });
                 MyPlanner.main(new String[] { ".\\logistics\\domain.pddl",".\\logistics\\"+item.getName(),"logisticsTime.txt","logisticsLength.txt" });
             }
         }

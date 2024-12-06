@@ -1,4 +1,4 @@
-package pddl4j.examples.sat;
+package fr.uga.pddl4j.examples.sat;
 
 import fr.uga.pddl4j.heuristics.state.StateHeuristic;
 import fr.uga.pddl4j.parser.DefaultParsedProblem;
@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.BiConsumer;
 
 import org.sat4j.minisat.SolverFactory;
 import org.sat4j.specs.ISolver;
@@ -62,15 +61,6 @@ public class MyPlanner extends AbstractPlanner {
      */
     private static final Logger LOGGER = LogManager.getLogger(MyPlanner.class.getName());
 
-    // Fonction utilitaire pour écrire dans un fichier
-    BiConsumer<String, File> writeToFile = (content, file) -> {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-            writer.write(content);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    };
-
     private void setTimeFile(String resultFile) {
         this.timeFile = resultFile;
     }
@@ -79,7 +69,11 @@ public class MyPlanner extends AbstractPlanner {
         this.lengthFile = resultFile;
     }
 
-
+    private void appendToFile(String filePath, String content) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            writer.write(content);
+        }
+    }
     /**
      * Instantiates the planning problem from a parsed problem.
      *
@@ -133,56 +127,34 @@ public class MyPlanner extends AbstractPlanner {
                 // Decode solution into a plan
                 Plan plan = decodeSolution(solver.model(), problem);
                 this.getStatistics().setTimeToSearch(solver.getTimeout());
-                //Ecriture dans les fichiers
                 if (timeFile != null && lengthFile != null) {
                     String timeString = ";" + (this.getStatistics().getTimeToSearch()
-                            + this.getStatistics().getTimeToEncode() + this.getStatistics().getTimeToParse());
-                    String lengthString = ";" + plan.actions().size();
+                            + this.getStatistics().getTimeToEncode()
+                            + this.getStatistics().getTimeToParse());
+                    String lengthString = ";" + plan.size();
                 
-                    writeToFile.accept(timeString, this.timeFile);
-                    writeToFile.accept(lengthString, this.lengthFile);
+                    try {
+                        appendToFile(timeFile, timeString);
+                        appendToFile(lengthFile, lengthString);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-                
-
                 return plan;
             } else {
-                if (timeFile != null && lengthFile != null) {
-                    String timeString = ";" ;
-                    String lengthString = ";";
-                    writeToFile.accept(timeString, this.timeFile);
-                    writeToFile.accept(lengthString, this.lengthFile);
-                }
                 LOGGER.info("* SAT search failed\n");
                 return null;
             }
         } catch (ContradictionException e) {
-            if (timeFile != null && lengthFile != null) {
-                String timeString = ";" ;
-                String lengthString = ";";
-                writeToFile.accept(timeString, this.timeFile);
-                writeToFile.accept(lengthString, this.lengthFile);
-            }
             LOGGER.error("SAT problem has a contradiction!", e);
             return null;
         } catch (OutOfMemoryError e) {
-            if (timeFile != null && lengthFile != null) {
-                String timeString = ";" ;
-                String lengthString = ";";
-                writeToFile.accept(timeString, this.timeFile);
-                writeToFile.accept(lengthString, this.lengthFile);
-            }
             LOGGER.error(
                     "Problème trop grand pour la mémoire actuelle.");
             System.err.println(
                     "Erreur de mémoire.");
             return null;
         } catch (TimeoutException e) {
-            if (timeFile != null && lengthFile != null) {
-                String timeString = ";" ;
-                String lengthString = ";";
-                writeToFile.accept(timeString, this.timeFile);
-                writeToFile.accept(lengthString, this.lengthFile);
-            }
             LOGGER.error("SAT solver timeout exceeded!", e);
             return null;
         }
@@ -243,7 +215,7 @@ public class MyPlanner extends AbstractPlanner {
         }
     }
 
-    //Decodes the solution from the SAT solver
+    // Decodes the solution from the SAT solver
     private Plan decodeSolution(int[] model, Problem problem) {
         Plan plan = new SequentialPlan();
         for (int var : model) {
@@ -317,7 +289,7 @@ public class MyPlanner extends AbstractPlanner {
     public static void main(String[] args) {
         try {
             final MyPlanner planner = new MyPlanner();
-            if(args.length == 4) {
+            if (args.length == 4) {
                 planner.setTimeFile(args[2]);
                 planner.setLengthFile(args[3]);
             }

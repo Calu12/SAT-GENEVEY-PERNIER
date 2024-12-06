@@ -30,17 +30,16 @@ import picocli.CommandLine;
  */
 @CommandLine.Command(name = "ASP", version = "ASP 1.0", description = "Solves a specified planning problem using A* search strategy.", sortOptions = false, mixinStandardHelpOptions = true, headerHeading = "Usage:%n", synopsisHeading = "%n", descriptionHeading = "%nDescription:%n%n", parameterListHeading = "%nParameters:%n", optionListHeading = "%nOptions:%n")
 
-public class myHSP extends AbstractPlanner {
+public class HSP extends AbstractPlanner {
 
     private double heuristicWeight;
     private StateHeuristic.Name heuristic;
     private String timeFile;
     private String lengthFile;
-
     /**
      * The class logger.
      */
-    private static final Logger LOGGER = LogManager.getLogger(myHSP.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(MyPlanner.class.getName());
 
     private void setTimeFile(String resultFile) {
         this.timeFile = resultFile;
@@ -50,6 +49,11 @@ public class myHSP extends AbstractPlanner {
         this.lengthFile = resultFile;
     }
 
+    private void appendToFile(String filePath, String content) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true))) {
+            writer.write(content);
+        }
+    }
     /**
      * Instantiates the planning problem from a parsed problem.
      *
@@ -85,43 +89,29 @@ public class myHSP extends AbstractPlanner {
             this.getStatistics().setTimeToSearch(search.getSearchingTime());
             this.getStatistics().setMemoryUsedToSearch(search.getMemoryUsed());
 
-            // Récupération des actions du plan
-            List<Action> actions = plan.actions(); // Utilisation de la méthode actions()
-
             if (timeFile != null && lengthFile != null) {
-                StringBuilder rawTime = new StringBuilder();
-                StringBuilder rawLength = new StringBuilder();
+                String timeString = ";" + (this.getStatistics().getTimeToSearch()
+                        + this.getStatistics().getTimeToEncode()
+                        + this.getStatistics().getTimeToParse());
+                String lengthString = ";" + plan.size();
 
-                String timeString = String.valueOf(this.getStatistics().getTimeToSearch()
-                        + this.getStatistics().getTimeToEncode() + this.getStatistics().getTimeToParse());
-
-                rawTime.append(";" + timeString);
-                rawLength.append(";" + actions.size());
-
-                // ecrire les résultats dans le fichier
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.timeFile, true))) {
-                    writer.write(rawTime.toString());
+                try {
+                    appendToFile(timeFile, timeString);
+                    appendToFile(lengthFile, lengthString);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.lengthFile, true))) {
-                    writer.write(rawLength.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
             }
+            
 
         } else {
             if (timeFile != null && lengthFile != null) {
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.timeFile, true))) {
-                    writer.write(";");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(this.lengthFile, true))) {
-                    writer.write(";");
+                String timeString = ";" ;
+                String lengthString = ";";
+
+                try {
+                    appendToFile(timeFile, timeString);
+                    appendToFile(lengthFile, lengthString);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -166,14 +156,13 @@ public class myHSP extends AbstractPlanner {
     public static void main(String[] args) {
 
         try {
-            final myHSP planner = new myHSP();
+            final HSP planner = new HSP();
             if (args.length == 4) {
                 planner.setTimeFile(args[2]);
                 planner.setLengthFile(args[3]);
             }
-            planner.setTimeout(900);
             CommandLine cmd = new CommandLine(planner);
-            cmd.execute(new String[] { args[0], args[1] });
+            cmd.execute(args);
         } catch (IllegalArgumentException e) {
             LOGGER.fatal(e.getMessage());
         }
