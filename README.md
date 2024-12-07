@@ -78,3 +78,11 @@ Remarque : On peut changer le nom du fichier de problème et de son dossier dans
 javac -d classes -cp lib/pddl4j-4.0.0.jar;lib/org.sat4j.core.jar;classes src/fr/uga/pddl4j/examples/sat/EvaluationSingle.java
  ```
 Pour recompiler la classe avant de l'exécuter.
+
+
+<h1>Stockage des plans</h1>
+
+Quand le planificateur SAT réussi à trouver un plan, il l'enregistre dans un fichier intitulé "res"+\<le nom du fichier problème>.
+Ces plan sont stockés dans les dossiers planBlocks, planDepots, planGripper et planLogistics pour pouvoir vérifier leur validité.
+
+Cependant le script validate.py, sensé vérifier automatiquement la validité de tout les plans, n'est pas encore fonctionnel. 
