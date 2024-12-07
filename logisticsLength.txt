@@ -1,0 +1,11 @@
+probleme;HSPlength;SATlength
+p01.pddl;20;31
+p02.pddl;19;29
+p03.pddl;15;16
+p04.pddl;27;32
+p05.pddl;17;31
+p06.pddl;8;8
+p07.pddl;26;32
+p08.pddl;14;15
+p09.pddl;25;32
+p10.pddl;24;31

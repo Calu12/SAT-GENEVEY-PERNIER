@@ -1,0 +1,11 @@
+probleme;HSPtemps;SATtemps
+p01.pddl;15;60
+p02.pddl;9;1139
+p03.pddl;528;
+p04.pddl;8620;
+p05.pddl;221035;
+p06.pddl;;
+p07.pddl;570;213080
+p08.pddl;178689;
+p09.pddl;;
+p10.pddl;3478;529465

@@ -7,12 +7,12 @@ import java.io.IOException;
 
 public class EvaluationSingle {
     public static void main(String[] args) {
-        /* 
-        String file = "p20.pddl";
+        
+        String file = "p09.pddl";
         String dossier="gripper";
 
         
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(dossier+"Time.txt", true))) {
+        /*try (BufferedWriter writer = new BufferedWriter(new FileWriter(dossier+"Time.txt", true))) {
             writer.write("\n" + file+";");
         } catch (IOException e) {
             e.printStackTrace();
@@ -21,9 +21,9 @@ public class EvaluationSingle {
             writer.write("\n" + file + ";");
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        MyPlanner.main(new String[] { ".\\"+dossier+"\\domain.pddl", ".\\"+dossier+"\\" + file, dossier+"Time.txt",
+        }*/
+        SATSolver.main(new String[] { ".\\"+dossier+"\\domain.pddl", ".\\"+dossier+"\\" + file, dossier+"Time.txt",
                 dossier+"Length.txt" });
-        */
+        
     }
 }

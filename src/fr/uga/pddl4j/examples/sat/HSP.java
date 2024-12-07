@@ -39,7 +39,7 @@ public class HSP extends AbstractPlanner {
     /**
      * The class logger.
      */
-    private static final Logger LOGGER = LogManager.getLogger(MyPlanner.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(HSP.class.getName());
 
     private void setTimeFile(String resultFile) {
         this.timeFile = resultFile;
@@ -54,6 +54,9 @@ public class HSP extends AbstractPlanner {
             writer.write(content);
         }
     }
+
+    
+
     /**
      * Instantiates the planning problem from a parsed problem.
      *
@@ -101,12 +104,13 @@ public class HSP extends AbstractPlanner {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
+                
             }
-            
 
         } else {
             if (timeFile != null && lengthFile != null) {
-                String timeString = ";" ;
+                String timeString = ";";
                 String lengthString = ";";
 
                 try {
@@ -162,7 +166,7 @@ public class HSP extends AbstractPlanner {
                 planner.setLengthFile(args[3]);
             }
             CommandLine cmd = new CommandLine(planner);
-            cmd.execute(args);
+            cmd.execute(new String[] { args[0], args[1] });
         } catch (IllegalArgumentException e) {
             LOGGER.fatal(e.getMessage());
         }
